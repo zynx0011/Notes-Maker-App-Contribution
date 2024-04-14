@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const Signup = () => {
@@ -12,6 +12,8 @@ const Signup = () => {
   const [userEmail, setUserEmail] = useState("");
   const [userName, setUserName] = useState("");
   const [userPassword, setUserPassword] = useState("");
+
+  const navigate = useNavigate();
 
   const registerUser = async (e) => {
     try {
@@ -37,21 +39,24 @@ const Signup = () => {
         },
       );
       console.log("Data: ", result);
-      alert("User Entry Saved in Database");
-
+      navigate("/login");
     } catch (error) {
       console.log("Failed to Register User: ", error);
     }
-
   };
 
   return (
     <div className=" flex w-full items-center justify-center bg-[#f3f4f6]">
-      <form className="flex h-full w-full max-w-[420px] flex-col gap-3 bg-white p-5" onSubmit={registerUser}>
+      <form
+        className="flex h-full w-full max-w-[420px] flex-col gap-3 bg-white p-5"
+        onSubmit={registerUser}
+      >
         <h1 className="text-2xl font-black">Register</h1>
-        <div className="flex items-start justify-center gap-4" >
+        <div className="flex items-start justify-center gap-4">
           <div className="flex flex-col items-start justify-center">
-            <label className="font-bold" htmlFor="firstName">First Name</label>
+            <label className="font-bold" htmlFor="firstName">
+              First Name
+            </label>
             <input
               type="text"
               id="firstName"
@@ -62,7 +67,9 @@ const Signup = () => {
             />
           </div>
           <div className="flex flex-col items-start justify-center">
-            <label className="font-bold" htmlFor="lastName">Last Name</label>
+            <label className="font-bold" htmlFor="lastName">
+              Last Name
+            </label>
             <input
               type="text"
               id="lastName"
@@ -74,7 +81,9 @@ const Signup = () => {
           </div>
         </div>
         <div className="flex flex-col items-start justify-center">
-          <label className="font-bold" htmlFor="userBio">Bio</label>
+          <label className="font-bold" htmlFor="userBio">
+            Bio
+          </label>
           <textarea
             id="userBio"
             name="userBio"
@@ -84,10 +93,11 @@ const Signup = () => {
             required
             onChange={(e) => setUserBio(e.target.value)}
           ></textarea>
-
         </div>
         <div className="flex flex-col items-start justify-center">
-          <label className="font-bold" htmlFor="userEmail">Email</label>
+          <label className="font-bold" htmlFor="userEmail">
+            Email
+          </label>
           <input
             type="email"
             id="userEmail"
@@ -98,7 +108,9 @@ const Signup = () => {
           />
         </div>
         <div className="flex flex-col items-start justify-center">
-          <label className="font-bold" htmlFor="userMobile">Mobile Number</label>
+          <label className="font-bold" htmlFor="userMobile">
+            Mobile Number
+          </label>
           <input
             type="number"
             id="userMobile"
@@ -109,7 +121,9 @@ const Signup = () => {
           />
         </div>
         <div className="flex flex-col items-start justify-center">
-          <label className="font-bold" htmlFor="userName">UserName</label>
+          <label className="font-bold" htmlFor="userName">
+            UserName
+          </label>
           <input
             type="text"
             id="userName"
@@ -120,7 +134,9 @@ const Signup = () => {
           />
         </div>
         <div className="flex flex-col items-start justify-center">
-          <label className="font-bold" htmlFor="userPassword">Password</label>
+          <label className="font-bold" htmlFor="userPassword">
+            Password
+          </label>
           <input
             type="password"
             id="userPassword"

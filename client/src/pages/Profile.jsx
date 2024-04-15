@@ -4,29 +4,90 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 
 const Profile = () => {
-  const user = useSelector((state) => state.user.userData);
+  const user = useSelector(
+    (state) => state.user.userData?.user || state.user.userData,
+  );
+  // console.log(user);
+  const admin = useSelector((state) => state.user.userData.allUsers);
+
+  // useEffect(() => {
+  //   const fectchuser = async () => {
+  //     const set = useSelector((state) => state.user.userData.allUsers);
+  //     setAllUsers(set);
+  //   };
+  //   fectchuser();
+  // }, []);
+  const [allUsers, setAllUsers] = useState([]);
+  console.log(allUsers);
 
   const [userFiles, setUserFiles] = useState([]);
+  const [Documents, setDocuments] = useState([]);
+  console.log(Documents);
 
   const userId = user._id;
 
   useEffect(() => {
+    const getUsers = async () => {
+      try {
+        const result = await axios.get(`http://localhost:6969/auth/getUsers`);
+        console.log(result.data.users);
+        setAllUsers(result.data.users);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
     const getUserFiles = async () => {
-      const result = await axios.get(
-        `http://localhost:6969/notes/getFiles/${userId}`,
-      );
-      console.log(result.data);
-      setUserFiles(result.data.data);
+      try {
+        const result = await axios.get(
+          `http://localhost:6969/notes/getAllNotes`,
+        );
+        console.log(result.data);
+        setDocuments(result.data.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getUsers();
+    getUserFiles();
+  }, [setAllUsers, user.isAdmin]);
+
+  useEffect(() => {
+    const getUserFiles = async () => {
+      try {
+        const result = await axios.get(
+          `http://localhost:6969/notes/getFiles/${userId}`,
+        );
+        console.log(result.data);
+        setUserFiles(result.data.data);
+      } catch (error) {
+        console.log(error);
+      }
     };
 
     getUserFiles();
   }, [userId]);
 
+  const deleteUser = async (id) => {
+    try {
+      const result = await axios.delete(
+        `http://localhost:6969/auth/deleteUser/${id}`,
+      );
+      console.log(result);
+      const us = setAllUsers((prev) => console.log(prev, "this is prev"));
+
+      console.log(us);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const numberofUploads = userFiles.length;
   const numberofFiles = userFiles.reduce((count, file) => count + 1, 0);
 
   return (
-    <div className="flex flex-col items-center justify-center border border-red-500 lg:h-heightWithoutNavbar lg:flex-row">
+    <div className="flex min-h-screen flex-col items-center justify-center border border-red-500 lg:h-heightWithoutNavbar lg:flex-row">
       <div className="flex w-full flex-col items-center justify-center border-[3px] border-green-500 py-4 lg:h-full lg:w-[40%]">
         <div className="grid h-[200px] w-[200px] place-content-center overflow-hidden rounded-full bg-gray-400 text-2xl font-black">
           {/* 200 x 200 */}
@@ -49,16 +110,23 @@ const Profile = () => {
             </p>
             <p className="text-center text-5xl font-black">{numberofUploads}</p>
           </div>
+
           <span className="h-[60px] w-[1px] bg-gray-400" />
           <div className="grid h-[80px] w-[100px] place-content-center">
             <p className="text-center text-[12px] font-bold">No. of Files :</p>
             <p className="text-center text-5xl font-black">{numberofFiles}</p>
           </div>
         </div>
+        {admin && user.isAdmin && (
+          <h1 className="m-5 text-2xl font-semibold">
+            Total users : {allUsers.length}
+          </h1>
+        )}
       </div>
-      <div className="h-auto w-full border-[3px] border-amber-500 p-5 lg:h-full lg:w-[60%]">
+
+      <div className="h-auto min-h-screen w-full border-[3px] border-amber-500 p-5 lg:h-full lg:w-[60%]  ">
         <h1 className="mb-3 text-xl font-black">My Documents :</h1>
-        <div className="grid grid-cols-1 gap-5 p-7 sm:grid-cols-2 md:grid-cols-3">
+        <div className="relative  grid grid-cols-1 gap-5 p-7 sm:grid-cols-2 md:grid-cols-3">
           {userFiles.map((file) => (
             <a
               href={`http://localhost:6969/files/${file.files}`}
@@ -67,9 +135,76 @@ const Profile = () => {
               target="_blank"
             >
               <p className="font-semibold"> {file.fileName}</p>
+              {/* <p className="absolute left- top-5 ">
+                <embed
+                  src={file}
+                  type="application/pdf"
+                  width="100%"
+                  height="400px"
+                />
+              </p> */}
             </a>
           ))}
         </div>
+        <div className="flex flex-col gap-6">
+          {admin && user.isAdmin && (
+            <>
+              <div className="">
+                <h1 className="whitespace-nowrap text-3xl font-bold ">
+                  Admin Access -
+                </h1>
+              </div>
+              <br />
+
+              {admin &&
+                admin?.map((user) => (
+                  <div className="">
+                    <div
+                      key={user._id}
+                      className="  flex items-center justify-between rounded-lg bg-slate-500 p-5 "
+                    >
+                      <p className="text-xl font-semibold">{user.userName}</p>
+                      <button
+                        onClick={() => deleteUser(user._id)}
+                        className="whitespace-nowrap rounded-lg bg-red-600 p-3 font-semibold text-white"
+                      >
+                        Delete User
+                      </button>
+                    </div>
+                  </div>
+                ))}
+            </>
+          )}
+        </div>
+      </div>
+      <div className="div  p-5">
+        <h1 className="mb-4 whitespace-nowrap text-3xl font-bold ">
+          All Documents -{" "}
+        </h1>
+
+        {Documents.map((doc) => (
+          <div key={doc._id} className=" flex  flex-col items-center ">
+            {/* <p className="mb-2 w-full rounded-lg bg-slate-400 p-3 text-center text-xl font-semibold">
+              {doc.fileName}
+            </p> */}
+            <a
+              href={`http://localhost:6969/files/${doc.files}`}
+              key={doc._id}
+              className="mb-3 flex w-full items-center justify-between gap-3 rounded-xl border border-black p-3 px-4"
+              target="_blank"
+            >
+              <p className="w-full font-semibold"> {doc.fileName}</p>
+              {/* <p className="absolute left- top-5 ">
+                <embed
+                  src={file}
+                  type="application/pdf"
+                  width="100%"
+                  height="400px"
+                />
+              </p> */}
+            </a>
+          </div>
+        ))}
       </div>
     </div>
   );

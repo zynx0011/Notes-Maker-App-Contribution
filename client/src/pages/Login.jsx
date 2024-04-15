@@ -5,7 +5,6 @@ import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -23,23 +22,27 @@ const Login = () => {
 
       const result = await axios.post("http://localhost:6969/auth/login", user);
       console.log("User Logged in Successfully: ", result);
-
+      // console.log(result.data.user);
       dispatch(setUserData(result.data));
 
       navigate("/");
-
     } catch (error) {
       console.log("Cannot Login the User: ", error);
     }
   };
 
   return (
-    <div className="h-heightWithoutNavbar flex w-full items-center justify-center p-5">
-      <form className="flex w-full max-w-[420px] flex-col gap-4 rounded-xl bg-white p-5 shadow-xl" onSubmit={loginUser}>
+    <div className="flex h-heightWithoutNavbar w-full items-center justify-center p-5">
+      <form
+        className="flex w-full max-w-[420px] flex-col gap-4 rounded-xl bg-white p-5 shadow-xl"
+        onSubmit={loginUser}
+      >
         <h1 className="text-2xl font-bold">Login</h1>
         <div className="flex flex-col gap-4">
           <div className="flex flex-col items-start justify-center">
-            <label className="font-bold" htmlFor="userEmail">Email</label>
+            <label className="font-bold" htmlFor="userEmail">
+              Email
+            </label>
             <input
               type="email"
               id="userEmail"
@@ -50,7 +53,9 @@ const Login = () => {
             />
           </div>
           <div className="flex flex-col items-start justify-center">
-            <label className="font-bold" htmlFor="userPassword">Password</label>
+            <label className="font-bold" htmlFor="userPassword">
+              Password
+            </label>
             <input
               type="password"
               id="userPassword"
@@ -61,7 +66,10 @@ const Login = () => {
             />
           </div>
         </div>
-        <button className="rounded-lg bg-blue-500 px-5 py-2 font-bold text-white hover:bg-blue-600" type="submit">
+        <button
+          className="rounded-lg bg-blue-500 px-5 py-2 font-bold text-white hover:bg-blue-600"
+          type="submit"
+        >
           Log In
         </button>
         <div className="flex items-center justify-between text-sm">

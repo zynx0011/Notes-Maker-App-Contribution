@@ -90,16 +90,25 @@ const SearchBar = () => {
               className="flex w-full max-w-[500px] flex-col flex-wrap-reverse items-center justify-between rounded-xl bg-[#374151] p-6  text-white shadow-lg"
             >
               <p className="mt-2 text-sm">
-                <span className="text-xl font-bold">File name: </span>
-                <span className="text-xl">{notes.fileName} </span>
+                <span className="text-2xl font-bold">File name: </span>
+                <span className="text-2xl">{notes.fileName} </span>
               </p>
 
-              <button
-                onClick={() => showPDF(notes.files)}
-                className="mt-2 rounded-lg bg-slate-400 p-3 text-black"
-              >
-                Show PDF
-              </button>
+              <div className="flex items-center gap-7">
+                <button
+                  onClick={() => showPDF(notes.files)}
+                  className="mt-2 rounded-lg bg-slate-400 p-3 text-black"
+                >
+                  Show PDF
+                </button>
+                <a
+                  href={notes.files[0]}
+                  download
+                  className="mt-2 cursor-pointer rounded-lg bg-slate-400 p-3 text-black"
+                >
+                  Download PDF
+                </a>
+              </div>
             </div>
           ))}
 

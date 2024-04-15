@@ -3,13 +3,16 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 
 const UploadNote = () => {
-
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [tags, setTags] = useState("");
   const [file, setFile] = useState("");
+  console.log(file);
 
-  const user = useSelector((state) => state.user.userData);
+  const user = useSelector(
+    (state) => state.user.userData?.user || state.user.userData,
+  );
+
   const userId = user._id;
 
   const submitFile = async (e) => {
@@ -36,14 +39,16 @@ const UploadNote = () => {
       );
       console.log("Data: ", result);
       alert("Notes Uploaded Successfully");
-
     } catch (error) {
       console.log("Failed to submit file: ", error);
     }
   };
 
   return (
-    <form className="flex h-full w-full max-w-[770px] flex-col items-center justify-start  p-5 md:border md:border-gray-300 lg:justify-center" onSubmit={submitFile}>
+    <form
+      className="flex h-full w-full max-w-[770px] flex-col items-center justify-start  p-5 md:border md:border-gray-300 lg:justify-center"
+      onSubmit={submitFile}
+    >
       <h1 className="mb-5 text-2xl font-black">Upload Your Notes</h1>
       <div className="mb-5 w-full max-w-[550px] ">
         <input
@@ -110,7 +115,10 @@ const UploadNote = () => {
           </div>
         </label>
       </div>
-      <button className="my-5 w-full max-w-[550px] rounded-xl bg-blue-500 py-3 font-bold text-white hover:bg-blue-600 " type="submit">
+      <button
+        className="my-5 w-full max-w-[550px] rounded-xl bg-blue-500 py-3 font-bold text-white hover:bg-blue-600 "
+        type="submit"
+      >
         Submit
       </button>
     </form>

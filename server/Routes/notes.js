@@ -24,4 +24,6 @@ router.get("/getFiles", NotesController.getNote);
 router.get("/getFiles/:id", NotesController.getNoteByID);
 router.delete("/deleteNote", NotesController.deleteNote);
 
+router.get("/getAllNotes", NotesController.getAllNotes);
+
 module.exports = router;

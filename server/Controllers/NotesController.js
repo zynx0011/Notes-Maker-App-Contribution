@@ -86,4 +86,13 @@ const deleteNote = async (req, res) => {
   }
 };
 
-module.exports = { uploadNote, getNote, getNoteByID, deleteNote };
+const getAllNotes = async (req, res) => {
+  try {
+    const data = await Notes.find({});
+    res.send({ data: data });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+module.exports = { uploadNote, getNote, getNoteByID, deleteNote, getAllNotes };

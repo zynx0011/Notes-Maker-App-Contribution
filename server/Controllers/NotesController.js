@@ -78,7 +78,7 @@ const getNoteByID = async (req, res) => {
 
 const deleteNote = async (req, res) => {
   try {
-    const { id } = req.body;
+    const { id } = req.params;
     await Notes.deleteOne({ _id: id });
     res.send({ status: "Ok" });
   } catch (error) {
@@ -87,8 +87,13 @@ const deleteNote = async (req, res) => {
 };
 
 const getAllNotes = async (req, res) => {
+  const limit = parseInt(req.query.limit) || 8;
+  const page = parseInt(req.query.page) || 1;
+  const startIndex = (page - 1) * limit;
+  const endIndex = page * limit;
   try {
-    const data = await Notes.find({});
+    const data = await Notes.find({}).limit(limit);
+    console.log(data, "data");
     res.send({ data: data });
   } catch (error) {
     console.log(error);

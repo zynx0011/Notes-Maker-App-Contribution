@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { setUserData } from "../Redux/slices/user-slice";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -23,11 +24,13 @@ const Login = () => {
       const result = await axios.post("http://localhost:6969/auth/login", user);
       console.log("User Logged in Successfully: ", result);
       // console.log(result.data.user);
+      toast.success("User Logged in Successfully");
       dispatch(setUserData(result.data));
 
       navigate("/");
     } catch (error) {
       console.log("Cannot Login the User: ", error);
+      toast.error("Cannot Login the User");
     }
   };
 

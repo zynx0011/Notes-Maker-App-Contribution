@@ -103,7 +103,7 @@ const SearchBar = () => {
                 </button>
                 <a
                   href={notes.files[0]}
-                  download
+                  download={`${notes.fileName}.pdf`}
                   className="mt-2 cursor-pointer rounded-lg bg-slate-400 p-3 text-black"
                 >
                   Download PDF

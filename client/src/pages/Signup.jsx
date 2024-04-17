@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const Signup = () => {
   const [profilePreviewImage, setProfilePreviewImage] = useState("");
@@ -39,9 +40,11 @@ const Signup = () => {
         },
       );
       console.log("Data: ", result);
+      toast.success("User Registered Successfully");
       navigate("/login");
     } catch (error) {
       console.log("Failed to Register User: ", error);
+      toast.error("Failed to Register User");
     }
   };
 
@@ -63,6 +66,7 @@ const Signup = () => {
               name="firstName"
               className="w-full rounded-lg border p-2 focus:border-blue-500  focus:outline-none"
               placeholder="John"
+              required
               onChange={(e) => setFirstName(e.target.value)}
             />
           </div>
@@ -76,6 +80,7 @@ const Signup = () => {
               name="lastName"
               className="w-full rounded-lg border p-2 focus:border-blue-500  focus:outline-none"
               placeholder="Doe"
+              required
               onChange={(e) => setLastName(e.target.value)}
             />
           </div>
@@ -104,6 +109,7 @@ const Signup = () => {
             name="userEmail"
             className="w-full rounded-lg border p-2 focus:border-blue-500  focus:outline-none"
             placeholder="your.email@example.com"
+            required
             onChange={(e) => setUserEmail(e.target.value)}
           />
         </div>
@@ -117,6 +123,7 @@ const Signup = () => {
             name="userMobile"
             className="w-full rounded-lg border p-2 focus:border-blue-500  focus:outline-none"
             placeholder="0000000000"
+            required
             onChange={(e) => setUserMobile(e.target.value)}
           />
         </div>
@@ -130,6 +137,7 @@ const Signup = () => {
             name="userName"
             className="w-full rounded-lg border p-2 focus:border-blue-500  focus:outline-none"
             placeholder="johndoe123"
+            required
             onChange={(e) => setUserName(e.target.value)}
           />
         </div>
@@ -143,6 +151,7 @@ const Signup = () => {
             name="userPassword"
             className="w-full rounded-lg border p-2 focus:border-blue-500  focus:outline-none"
             placeholder="*********"
+            required
             onChange={(e) => setUserPassword(e.target.value)}
           />
         </div>

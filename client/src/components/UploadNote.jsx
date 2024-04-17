@@ -1,6 +1,8 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const UploadNote = () => {
   const [title, setTitle] = useState("");
@@ -9,6 +11,11 @@ const UploadNote = () => {
   const [file, setFile] = useState("");
   console.log(file);
 
+  const navigate = useNavigate();
+
+  if (file) {
+    toast.success("Notes Uploaded Successfully");
+  }
   const user = useSelector(
     (state) => state.user.userData?.user || state.user.userData,
   );
@@ -38,8 +45,10 @@ const UploadNote = () => {
         },
       );
       console.log("Data: ", result);
-      alert("Notes Uploaded Successfully");
+      toast.success("File Uploaded Successfully");
+      navigate("/profile");
     } catch (error) {
+      toast.error("Failed to submit file ");
       console.log("Failed to submit file: ", error);
     }
   };
@@ -107,7 +116,7 @@ const UploadNote = () => {
               type="file"
               placeholder="File"
               accept="application/pdf"
-              required
+              // required
               id="dropzone-file"
               onChange={(e) => setFile(e.target.files[0])}
               className="hidden"

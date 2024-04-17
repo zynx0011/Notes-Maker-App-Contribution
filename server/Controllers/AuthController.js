@@ -4,6 +4,7 @@ const User = require("../Models/User");
 const bcrypt = require("bcrypt");
 const multer = require("multer");
 const cloudinary = require("cloudinary");
+const jwt = require("jsonwebtoken");
 
 dotenv.config();
 
@@ -56,10 +57,19 @@ const signup = async (req, res) => {
 
     await newUser.save();
 
-    return res.status(200).json({
-      status: "Ok",
-      user: newUser,
-    });
+    const token = jwt.sign({ _id: newUser._id }, process.env.JWT_SECRET);
+
+    return res
+      .cookie("token", token, {
+        httpOnly: true,
+        samesite: "none",
+        secure: true,
+      })
+      .status(200)
+      .json({
+        status: "Ok",
+        user: newUser,
+      });
   } catch (error) {
     res.status(400).json({ error: error.message });
     console.log(error);
@@ -74,6 +84,11 @@ const login = async (req, res) => {
     const user = await User.findOne({ userEmail });
 
     console.log(user);
+    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
+
+    console.log(token, "token");
 
     if (user.isAdmin === true) {
       const passwordMatch = await bcrypt.compare(
@@ -85,15 +100,31 @@ const login = async (req, res) => {
       }
 
       const allUsers = await User.find();
-      return res.json({ allUsers, user });
+      return res
+        .cookie("Access-token", token, {
+          httpOnly: true,
+          samesite: "none",
+          secure: true,
+        })
+        .status(200)
+        .json({ allUsers, user });
     } else {
       if (user) {
         const passwordMatch = await bcrypt.compare(
           userPassword,
           user.userPassword
         );
+        const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
+          expiresIn: "1h",
+        });
         if (passwordMatch) {
-          return res.json(user);
+          return res
+            .cookie("Access-token", token, {
+              httpOnly: true,
+              samesite: "none",
+              secure: true,
+            })
+            .json(user);
         } else {
           return res.json({ status: "Error", getUser: false });
         }

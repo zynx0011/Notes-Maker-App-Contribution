@@ -3,6 +3,7 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const express = require("express");
 const bodyParser = require("body-parser");
+const cookie = require("cookie-parser");
 
 const authRoutes = require("./Routes/auth");
 const noteRoutes = require("./Routes/notes");
@@ -14,24 +15,23 @@ dotenv.config();
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.json());
-
+app.use(cookie());
 
 try {
-    mongoose.connect(process.env.MONGO_URL);
-    console.log("Connection Successfull");
+  mongoose.connect(process.env.MONGO_URL);
+  console.log("Connection Successfull");
 } catch (error) {
-    console.log(error);
+  console.log(error);
 }
 
 app.get("/", (req, res) => {
-    res.send("Server Is Running");
+  res.send("Server Is Running");
 });
-
 
 app.use("/auth", authRoutes);
 app.use("/notes", noteRoutes);
 app.use("/files", express.static("files"));
 
 app.listen(PORT, () => {
-    console.log(`Server Running on Port ${PORT}`);
-})
+  console.log(`Server Running on Port ${PORT}`);
+});

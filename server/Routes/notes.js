@@ -22,7 +22,7 @@ const upload = multer({
 router.post("/upload", upload.single("file"), NotesController.uploadNote);
 router.get("/getFiles", NotesController.getNote);
 router.get("/getFiles/:id", NotesController.getNoteByID);
-router.delete("/deleteNote", NotesController.deleteNote);
+router.delete("/deleteNote/:id", NotesController.deleteNote);
 
 router.get("/getAllNotes", NotesController.getAllNotes);
 

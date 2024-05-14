@@ -23,6 +23,7 @@ const Profile = () => {
   const [allUser, setAllUser] = useState([allUsers]);
   const [userFiles, setUserFiles] = useState([]);
   const [Documents, setDocuments] = useState([]);
+  const [adminFiles, setAdminFiles] = useState([]);
   // console.log(Documents);
 
   const userId = user._id;
@@ -31,7 +32,7 @@ const Profile = () => {
     const getUsers = async () => {
       try {
         const result = await axios.get(`http://localhost:6969/auth/getUsers`);
-        // console.log(result.data.users);
+        console.log(result);
         setAllUsers(result.data.users);
       } catch (error) {
         console.log(error);
@@ -102,6 +103,19 @@ const Profile = () => {
     }
   };
 
+  const GetUserNote = async (id) => {
+    try {
+      const result = await axios.get(
+        `http://localhost:6969/auth/getUsersNote/${id}`,
+      );
+      console.log(result.data.notes);
+      // setUserFiles(result.data.data);
+      setAdminFiles(result.data.notes);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const numberofUploads = userFiles.length;
   const numberofFiles = userFiles.reduce((count, file) => count + 1, 0);
 
@@ -143,7 +157,7 @@ const Profile = () => {
         )}
       </div>
 
-      <div className="h-auto min-h-screen w-full border-[3px] border-amber-500 p-5 lg:h-full lg:w-[80%]  ">
+      <div className="h-auto min-h-screen w-full overflow-scroll border-[3px] border-amber-500 p-5 lg:h-full  lg:w-[80%]">
         <h1 className="mb-3 text-xl font-black">My Documents :</h1>
         <div className="relative  grid grid-cols-1 gap-5 p-7 sm:grid-cols-2 md:grid-cols-3">
           {userFiles.map((file) => (
@@ -160,7 +174,7 @@ const Profile = () => {
               </a>
               <button
                 onClick={() => deleteFile(file._id)}
-                className="whitespace-nowrap rounded-2xl bg-red-600 p-2 text-base font-semibold text-white"
+                className="  whitespace-nowrap rounded-2xl bg-red-600 p-2 text-base font-semibold text-white"
               >
                 Delete File
               </button>
@@ -175,7 +189,7 @@ const Profile = () => {
             </div>
           ))}
         </div>
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-6 ">
           {admin && user.isAdmin && (
             <>
               <div className="">
@@ -190,7 +204,7 @@ const Profile = () => {
                   <div className="">
                     <div
                       key={user._id}
-                      className="  flex items-center justify-between rounded-lg bg-slate-500 p-5 "
+                      className="flex  items-center justify-between overflow-hidden rounded-lg bg-slate-500 p-5 "
                     >
                       <p className="text-xl font-semibold">{user.userName}</p>
                       <button
@@ -198,6 +212,12 @@ const Profile = () => {
                         className="whitespace-nowrap rounded-lg bg-red-600 p-3 font-semibold text-white"
                       >
                         Delete User
+                      </button>
+                      <button
+                        onClick={() => GetUserNote(user._id)}
+                        className=" hidden whitespace-nowrap rounded-lg bg-green-600 p-3 font-semibold text-white"
+                      >
+                        Manage Users Documents
                       </button>
                     </div>
                   </div>

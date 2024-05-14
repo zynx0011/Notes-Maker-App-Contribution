@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 const multer = require("multer");
 const cloudinary = require("cloudinary");
 const jwt = require("jsonwebtoken");
+const Notes = require("../Models/Notes");
 
 dotenv.config();
 
@@ -23,12 +24,24 @@ const signup = async (req, res) => {
 
     // If current user exists
 
+    // if (
+    //   firstName ||
+    //   lastName ||
+    //   userBio ||
+    //   userEmail ||
+    //   userMobile ||
+    //   userName === ""
+    // ) {
+    //   return res.status(401).send("Please provide all the details");
+    // }
+
     const existingUser = await User.findOne({ userEmail });
     if (existingUser) {
-      res.status(401).send("User Already Exists with this email");
+      return res.status(401).send("User Already Exists with this email");
     }
 
     // Check if file is provided
+    console.log(req.file, "req.file");
     if (!req.file) {
       return res.status(400).json({ error: "No Profile Image Provided" });
     }
@@ -152,6 +165,7 @@ const deleteUser = async (req, res) => {
 const fetchUsers = async (req, res) => {
   try {
     const users = await User.find();
+
     res.send({ users });
   } catch (error) {
     console.log(error);
@@ -159,4 +173,14 @@ const fetchUsers = async (req, res) => {
   }
 };
 
-module.exports = { signup, login, deleteUser, fetchUsers };
+const getUserNotes = async (req, res) => {
+  try {
+    const notes = await Notes.find({ uploadedBy: req.params.id });
+    res.send({ notes });
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({ error: error.message });
+  }
+};
+
+module.exports = { signup, login, deleteUser, fetchUsers, getUserNotes };

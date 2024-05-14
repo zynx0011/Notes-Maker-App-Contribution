@@ -4,6 +4,7 @@ const authController = require("../Controllers/AuthController");
 const multer = require("multer");
 const dotenv = require("dotenv");
 const cloudinary = require("cloudinary");
+const { route } = require("./notes");
 
 dotenv.config();
 
@@ -37,5 +38,7 @@ router.post("/login", authController.login);
 router.delete("/deleteUser/:id", authController.deleteUser);
 
 router.get("/getUsers", authController.fetchUsers);
+
+router.get("/getUsersNote/:id", authController.getUserNotes);
 
 module.exports = router;

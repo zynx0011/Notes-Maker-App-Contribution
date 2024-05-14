@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -13,11 +13,14 @@ const Signup = () => {
   const [userEmail, setUserEmail] = useState("");
   const [userName, setUserName] = useState("");
   const [userPassword, setUserPassword] = useState("");
+  const [valid, setValid] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
   const registerUser = async (e) => {
     try {
+      setLoading(true);
       e.preventDefault();
 
       const formData = new FormData();
@@ -29,6 +32,15 @@ const Signup = () => {
       formData.append("userName", userName);
       formData.append("userPassword", userPassword);
       formData.append("profileImage", profileImage);
+
+      console.log(formData);
+
+      if (!valid) {
+        setLoading(false);
+        return toast.error(
+          "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number and one special character",
+        );
+      }
 
       const result = await axios.post(
         "http://localhost:6969/auth/signup",
@@ -43,12 +55,44 @@ const Signup = () => {
       toast.success("User Registered Successfully");
       navigate("/login");
     } catch (error) {
+      setLoading(false);
       console.log("Failed to Register User: ", error);
       toast.error("Failed to Register User");
     }
   };
 
-  return (
+  const handlePasswordChange = (event) => {
+    const newPassword = event.target.value;
+    // Define your password validation conditions here
+    const isLengthValid = newPassword.length >= 8;
+    const hasUpperCase = /[A-Z]/.test(newPassword);
+    const hasLowerCase = /[a-z]/.test(newPassword);
+    const hasDigit = /[0-9]/.test(newPassword);
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(newPassword);
+
+    const isValidPassword =
+      isLengthValid &&
+      hasUpperCase &&
+      hasLowerCase &&
+      hasDigit &&
+      hasSpecialChar;
+    setValid(isValidPassword);
+    setUserPassword(newPassword);
+    setLoading(false);
+  };
+
+  return loading ? (
+    <div className="flex min-h-[80vh] items-center justify-center">
+      <div
+        className=" inline-block h-10 w-10 animate-spin rounded-full border-4 border-solid border-current border-r-transparent text-center align-[-0.125em]  text-blue-600 motion-reduce:animate-[spin_1.5s_linear_infinite]"
+        role="status"
+      >
+        <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
+          Loading...
+        </span>
+      </div>
+    </div>
+  ) : (
     <div className=" flex w-full items-center justify-center bg-[#f3f4f6]">
       <form
         className="flex h-full w-full max-w-[420px] flex-col gap-3 bg-white p-5"
@@ -121,6 +165,7 @@ const Signup = () => {
             type="number"
             id="userMobile"
             name="userMobile"
+            min={10}
             className="w-full rounded-lg border p-2 focus:border-blue-500  focus:outline-none"
             placeholder="0000000000"
             required
@@ -151,8 +196,8 @@ const Signup = () => {
             name="userPassword"
             className="w-full rounded-lg border p-2 focus:border-blue-500  focus:outline-none"
             placeholder="*********"
-            required
-            onChange={(e) => setUserPassword(e.target.value)}
+            // required
+            onChange={handlePasswordChange}
           />
         </div>
         <div className="flex w-full flex-col items-center justify-center">
@@ -206,7 +251,10 @@ const Signup = () => {
             </div>
           </label>
         </div>
-        <button className="rounded-lg bg-blue-500 px-5 py-2 font-bold text-white hover:bg-blue-600">
+        <button
+          type="submit"
+          className="rounded-lg bg-blue-500 px-5 py-2 font-bold text-white hover:bg-blue-600"
+        >
           Register
         </button>
         <div className="text-sm">

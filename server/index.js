@@ -12,7 +12,12 @@ const app = express();
 const PORT = 6969;
 
 dotenv.config();
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://savedocument-15a7kxn53-zynx0011s-projects.vercel.app/",
+    credentials: true,
+  })
+);
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(cookie());

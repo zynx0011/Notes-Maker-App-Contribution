@@ -14,8 +14,9 @@ const PORT = 6969;
 dotenv.config();
 app.use(
   cors({
-    origin: "https://savedocument-15a7kxn53-zynx0011s-projects.vercel.app/",
-    credentials: true,
+    // origin: "https://savedocument-15a7kxn53-zynx0011s-projects.vercel.app/",
+    origin: "*",
+    // credentials: true,
   })
 );
 app.use(bodyParser.json());
@@ -23,7 +24,7 @@ app.use(express.json());
 app.use(cookie());
 
 try {
-  mongoose.connect(process.env.MONGO_URL);
+  mongoose.connect(process.env.MONGODB_URI);
   console.log("Connection Successfull");
 } catch (error) {
   console.log(error);

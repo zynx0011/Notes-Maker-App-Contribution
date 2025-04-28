@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: myapp
+data:
+  CORS_ORIGIN: "*"
+  ACCESS_TOKEN_SECRET: kajshiuwebrb29kasdjfiuawekjbwkjzbmczvjkhukzjskbvxjcbviasdf
+  ACCESS_TOKEN_EXPIRY: 10d
+  REFRESH_TOKEN_SECRET: askdjfhiwueioubsajkbzbcaviuww387iagskjfasblkdbwliuebfjkasbdlkfjb
+  REFRESH_TOKEN_EXPIRY: 10d

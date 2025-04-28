@@ -1,0 +1,97 @@
+# apiVersion: v1
+# kind: PersistentVolumeClaim
+# metadata:
+#   name: server-pv-claim
+#   labels:
+#     app: server
+#     tier: backend
+# spec:
+#   accessModes:
+#     - ReadWriteOnce
+#   resources:
+#     requests:
+#       storage: 1Gi
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "server"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      team: prod
+  template:
+    metadata:
+      labels:
+        team: prod
+    spec:
+      containers:
+        - name: "server"
+          image: "server:v2"
+          env:
+            - name: MONGODB_URI
+              valueFrom:
+                secretKeyRef:
+                  name: mysecretbox
+                  key: MONGODB_URI
+            - name: ACCESS_TOKEN_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: mysecretbox
+                  key: ACCESS_TOKEN_SECRET
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: mysecretbox
+                  key: JWT_SECRET
+            - name: CORS_ORIGIN
+              valueFrom:
+                configMapKeyRef:
+                  name: myapp
+                  key: CORS_ORIGIN
+            - name: ACCESS_TOKEN_SECRET
+              valueFrom:
+                configMapKeyRef:
+                  name: myapp
+                  key: ACCESS_TOKEN_SECRET
+            - name: ACCESS_TOKEN_EXPIRY
+              valueFrom:
+                configMapKeyRef:
+                  name: myapp
+                  key: ACCESS_TOKEN_EXPIRY
+            - name: REFRESH_TOKEN_SECRET
+              valueFrom:
+                configMapKeyRef:
+                  name: myapp
+                  key: REFRESH_TOKEN_SECRET
+            - name: REFRESH_TOKEN_EXPIRY
+              valueFrom:
+                configMapKeyRef:
+                  name: myapp
+                  key: REFRESH_TOKEN_EXPIRY
+          ports:
+            - containerPort: 6969
+          resources:
+          # volumeMounts: # Mounting voulume obtained from Persistent Volume Claim
+          #   - name: mysql-persistent-storage
+          #     mountPath: /var/lib/mysql
+      # volumes:
+      #   - name: mysql-persistent-storage
+      #     persistentVolumeClaim:
+      #       claimName: mysql-pv-claim
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: server
+spec:
+  clusterIP: 10.99.187.111
+  ports:
+    - port: 6969
+      protocol: TCP
+      targetPort: 6969
+  selector:
+    team: prod
+  type: ClusterIP

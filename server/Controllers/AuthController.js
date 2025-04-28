@@ -41,13 +41,13 @@ const signup = async (req, res) => {
     }
 
     // Check if file is provided
-    console.log(req.file, "req.file");
-    if (!req.file) {
-      return res.status(400).json({ error: "No Profile Image Provided" });
-    }
+    // console.log(req.file, "req.file");
+    // if (!req.file) {
+    //   return res.status(400).json({ error: "No Profile Image Provided" });
+    // }
 
-    const result = await cloudinary.uploader.upload(req.file.path);
-    console.log(result);
+    // const result = await cloudinary.uploader.upload(req.file.path);
+    // console.log(result);
 
     const password = req.body.userPassword;
     const saltRounds = 10;
@@ -65,7 +65,7 @@ const signup = async (req, res) => {
       userMobile,
       userName,
       userPassword: encryptedPassword,
-      profileImage: result.secure_url,
+      // profileImage: result.secure_url,
     });
 
     await newUser.save();
@@ -146,7 +146,7 @@ const login = async (req, res) => {
       }
     }
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(400).json({ error: "help" + error.message });
   }
 };
 

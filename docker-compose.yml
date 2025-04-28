@@ -1,0 +1,31 @@
+version: "3"
+services:
+  frontend:
+    build: ./client/.
+    image: zynx01/notes-maker-client:v1
+    ports:
+      - "80:80"
+    networks:
+      - my-network
+    depends_on:
+      - backend
+
+  backend:
+    build: ./server/.
+    image: zynx01/server:v1
+    ports:
+      - "6969:6969"
+    environment:
+      - MONGODB_URI=mongodb+srv://zrdrc31:kunal123@cluster0.abi3mc3.mongodb.net
+      - CORS_ORIGIN=*
+      - ACCESS_TOKEN_SECRET=kajshiuwebrb29kasdjfiuawekjbwkjzbmczvjkhukzjskbvxjcbviasdf
+      - ACCESS_TOKEN_EXPIRY=10d
+      - REFRESH_TOKEN_SECRET=askdjfhiwueioubsajkbzbcaviuww387iagskjfasblkdbwliuebfjkasbdlkfjb
+      - REFRESH_TOKEN_EXPIRY=10d
+      - JWT_SECRET=kajshuwebrb29kasdjksjhdfuhasuydagfoiuwebrb29kasdjksdj
+    networks:
+      - my-network
+
+networks:
+  my-network:
+    driver: bridge

@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: notes-maker-ingress
+spec:
+  rules:
+    - host: notesmaker.yourdomain.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: server
+                port:
+                  number: 6969
+          - path: /home
+            pathType: Prefix
+            backend:
+              service:
+                name: client
+                port:
+                  number: 80

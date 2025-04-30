@@ -18,7 +18,7 @@ kind: Deployment
 metadata:
   name: "server"
 spec:
-  replicas: 1
+  replicas: {{ .Values.serverReplicas }}
   selector:
     matchLabels:
       team: prod
@@ -29,7 +29,7 @@ spec:
     spec:
       containers:
         - name: "server"
-          image: "server:v2"
+          image: "zynx01/server:v2"
           env:
             - name: MONGODB_URI
               valueFrom:

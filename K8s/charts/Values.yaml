@@ -1,0 +1,2 @@
+serverImage: "zynx01/server:v2"
+serverReplicas: 1

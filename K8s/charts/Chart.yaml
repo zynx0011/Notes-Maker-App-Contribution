@@ -1,0 +1,5 @@
+apiVersion: v2
+name: notes-maker
+description: A notes taking application
+version: 0.1.0 # Follow semantic versioning
+appVersion: "1.0.0" # Your app version

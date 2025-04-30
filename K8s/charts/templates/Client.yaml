@@ -33,3 +33,45 @@ spec:
       targetPort: 80 # Container port (app inside pod)
       nodePort: 30091 # Optional: specify if you want a fixed external port
   type: NodePort
+
+
+
+
+
+# apiVersion: apps/v1
+# kind: Deployement
+# metadata:
+#   name: client
+# spec: 
+#   replicas: 2
+#   selector: 
+#     matchLabels:
+#       app: client
+#   template:
+#     metadata:
+#       labels:
+#         app: client
+#     spec:
+#       containers:
+#         - name: "client"
+#           image: "zynx01/notes-maker-client:v1"
+#           ports:
+#             - containerPort: 80
+          
+
+
+# ---
+
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: client
+# spec:
+#   selector:
+#     app: client
+#   ports:
+#     - protocol: TCP
+#       port: 5173 # ClusterIP port (internal)
+#       targetPort: 80 # Container port (app inside pod)
+#       nodePort: 30091 # Optional: specify if you want a fixed external port
+#   type: NodePort

@@ -18,6 +18,7 @@
 #       selfHeal: true
 #     syncOptions:
 #       - CreateNamespace=true
+
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -30,11 +31,7 @@ spec:
     path: K8s/charts
     helm:
       valueFiles:
-        - values.yaml
+        - Values.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: default
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true

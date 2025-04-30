@@ -16,21 +16,16 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.appName | default "server" }}
-  labels:
-    app: {{ .Values.appName | default "server" }}
-    team: {{ .Values.team | default "prod" }}
+  name: "server"
 spec:
-  replicas: {{ .Values.replicas | default 1 }}
+  replicas: 1
   selector:
     matchLabels:
-      app: {{ .Values.appName | default "server" }}
-      team: {{ .Values.team | default "prod" }}
+      team: prod
   template:
     metadata:
       labels:
-        app: {{ .Values.appName | default "server" }}
-        team: {{ .Values.team | default "prod" }}
+        team: prod
     spec:
       securityContext:
         runAsNonRoot: true

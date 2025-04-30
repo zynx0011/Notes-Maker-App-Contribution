@@ -18,17 +18,23 @@
 #       selfHeal: true
 #     syncOptions:
 #       - CreateNamespace=true
-
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: notes-maker
 spec:
+  project: default
   source:
-    chart: notes-maker
-    repoURL: https://github.com/zynx0011/Notes-Maker-App-Contribution.git
+    repoURL: https://github.com/zynx01/Notes-Maker-App-Contribution.git
     targetRevision: HEAD
-    path: charts/notes-maker
+    path: K8s/charts
     helm:
       valueFiles:
-        - values-prod.yaml
+        - values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

@@ -1,2 +1,24 @@
-serverImage: "zynx01/server:v2"
-serverReplicas: 1
+appName: "server"
+team: "prod"
+replicas: 2
+
+image:
+  repository: "zynx01/server"
+  tag: "v2"
+
+secrets:
+  name: "mysecretbox"
+
+configMap:
+  name: "myapp"
+
+service:
+  port: 6969
+
+resources:
+  requests:
+    cpu: "100m"
+    memory: "128Mi"
+  limits:
+    cpu: "500m"
+    memory: "512Mi"

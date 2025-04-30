@@ -4,7 +4,7 @@ metadata:
   name: notes-maker-ingress
 spec:
   rules:
-    - host: notesmaker.yourdomain.com
+    - host: notesmaker.com
       http:
         paths:
           - path: /

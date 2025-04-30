@@ -1,0 +1,15 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: notes-maker-monitor
+  namespace: monitoring
+  labels:
+    release: monitoring # Must match your Helm release name
+spec:
+  selector:
+    matchLabels:
+      team: prod # Must match your app's service labels
+  endpoints:
+    - port: "6969" # Your backend port
+      path: /metrics # Metrics endpoint
+      interval: 15s

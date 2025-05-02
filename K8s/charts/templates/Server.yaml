@@ -18,7 +18,7 @@ kind: Deployment
 metadata:
   name: "server"
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       team: prod
@@ -84,7 +84,8 @@ spec:
 #       #   - name: mysql-persistent-storage
 #       #     persistentVolumeClaim:
 #       #       claimName: mysql-pv-claim
-# ---
+
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -98,5 +99,3 @@ spec:
   selector:
     team: prod
   type: ClusterIP
-
-
